@@ -1,3 +1,4 @@
+
 ###### Step 1: Import Python Libraries
 # Data processing
 import pandas as pd
@@ -81,3 +82,20 @@ for i in similar_user_movies.columns:
       count +=1
   # Get the average score for the item
   item_score[i] = total / count
+# Convert dictionary to pandas dataframe
+item_score = pd.DataFrame(item_score.items(), columns=['movie', 'movie_score'])
+    
+# Sort the movies by score
+ranked_item_score = item_score.sort_values(by='movie_score', ascending=False)
+# Select top m movies
+m = 10
+ranked_item_score.head(m)
+###### Step 9: Predict Scores (Optional)
+# Average rating for the picked user
+avg_rating = matrix[matrix.index == picked_userid].T.mean()[picked_userid]
+# Print the average movie rating for user 1
+print(f'The average movie rating for user {picked_userid} is {avg_rating:.2f}')
+# Calcuate the predicted rating
+ranked_item_score['predicted_rating'] = ranked_item_score['movie_score'] + avg_rating
+# Take a look at the data
+ranked_item_score.head(m)
