@@ -39,3 +39,16 @@ evaluator = RegressionEvaluator(metricName='rmse', labelCol='rating', prediction
 # get the RMSE
 rmse = evaluator.evaluate(predictions)
 print('Root-mean-square error = ' + str(rmse))
+
+# get input user id
+user_id = int(input('Enter user id: '))
+
+# make a single prediction
+single_user = test.filter(test['user_id']==user_id).select(['user_id', 'game_id'])
+print('single_user')
+single_user.show()
+
+# recommend top 5 games for the user
+recommendations = model.transform(single_user)
+print('recommendations')
+recommendations.orderBy('prediction', ascending=False).show(n=5)
