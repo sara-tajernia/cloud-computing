@@ -52,3 +52,16 @@ single_user.show()
 recommendations = model.transform(single_user)
 print('recommendations')
 recommendations.orderBy('prediction', ascending=False).show(n=5)
+
+
+# list of game_id recommended to user 
+game_id = recommendations.orderBy('prediction', ascending=False).select('game_id').collect()
+recomendation_score = recommendations.orderBy('prediction', ascending=False).select('prediction').collect()
+
+
+games = pd.read_csv('games.csv')
+
+# print name game with game_id
+for i in range(len(game_id)):
+    game_data = games.loc[games['game_id'] == game_id[i][0]]
+    print(i+1 , ':', 'game:' ,game_data['name'].values[0], '  score:', recomendation_score[i][0])
